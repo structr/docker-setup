@@ -11,7 +11,7 @@
 - run `docker-compose build`
 
 ##### Starting the instances:
-- `docker-compose --compatibility up -d``
+- RUN `docker-compose --compatibility up -d` to start Neo4j and Structr
 - Open `http://127.0.0.1:8082/structr/` in your browser to access Structr
 
 ##### Stopping the instances:
@@ -30,7 +30,7 @@
 - run `docker swarm init`
 
 ##### Starting the instances:
-- `docker stack deploy --compose-file docker-compose.yml structr`
+- Run `docker stack deploy --compose-file docker-compose.yml structr` to start Neo4j and Structr
 - Open `http://127.0.0.1:8082/structr/` in your browser to access Structr
 
 ##### Stopping the instances:
