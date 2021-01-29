@@ -42,8 +42,12 @@
 - `docker exec -it <Unique identifier for container> /bin/sh`
 
 ##### Inspecting the stack
-- `docker stack ps structr`
-- `docker stack services structr`
+- Run `docker stack ps structr` to get a list of all tasks in the structr stack
+- RUN `docker stack services structr` to get a list of all services in the structr stack
+
+
+### Customizing Ressources
+The CPU and RAM configuration of the containers can be changed in the docker-compose.yml file. 
 
 
 ### Deployment Roundtrip of an Structr application (order is crucial!!!):
