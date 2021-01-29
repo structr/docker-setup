@@ -7,11 +7,11 @@
 ### Usage with docker-compose:
 ##### Initial setup:
 
-- copy your license.key file to ./structr/license.key
-- run `docker-compose build`
+- Copy your license.key file to ./structr/license.key
+- Run `docker-compose build`
 
 ##### Starting the instances:
-- RUN `docker-compose --compatibility up -d` to start Neo4j and Structr
+- Run `docker-compose --compatibility up -d` to start Neo4j and Structr
 - Open `http://127.0.0.1:8082/structr/` in your browser to access Structr
 
 ##### Stopping the instances:
@@ -47,7 +47,7 @@
 
 
 ### Customizing Ressources
-The CPU and RAM configuration of the containers can be changed in the docker-compose.yml file. 
+The CPU and RAM configuration of the containers can be changed in the docker-compose.yml file. If the config is changed here, then `./structr/memory.config` has to be adjusted as well to prevent Structr from using too much or too little ressources and triggering an OutOfMemory exception.
 
 
 ### Deployment Roundtrip of an Structr application (order is crucial!!!):
