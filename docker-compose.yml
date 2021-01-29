@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.3'
 services:  
   neo4j:
     image: neo4j:3.5.25
@@ -49,7 +49,3 @@ volumes:
   structr-files:
   repository:
   database:
-
- # 3docker swarm init
- # docker stack deploy --compose-file docker-compose.yml structr
- # docker stack rm structr
