@@ -4,6 +4,8 @@
 - docker
 - docker-compose
 
+----
+
 ### Usage with docker-compose:
 ##### Initial setup:
 
@@ -22,6 +24,7 @@
 - `note the container id`
 - `docker exec -it <Unique identifier for container> /bin/sh`
 
+----
 
 ### Usage with docker swarm:
 ##### Initial setup:
