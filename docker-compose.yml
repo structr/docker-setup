@@ -1,0 +1,55 @@
+version: '3.9'
+services:  
+  neo4j:
+    image: neo4j:3.5.25
+    #build: ./neo4j
+    ports:
+      - "7474:7474"
+      - "7473:7473"
+      - "7687:7687"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4g
+        reservations:
+          cpus: '1'
+          memory: 1g
+    volumes:
+      - ./volumes/database:/data
+  structr:
+    image: structr/structr:4.0-SNAPSHOT
+    build: ./structr
+    depends_on:
+      - neo4j
+    links: 
+      - neo4j
+    ports:
+     - "8082:8082"
+    environment:
+      - AGREE_TO_STRUCTR_PRIVACY_POLICY=yes
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4g
+        reservations:
+          cpus: '1'
+          memory: 1g
+    volumes:
+      # folders
+      - ./volumes/structr-files:/var/lib/structr/files
+      - ./volumes/repository:/var/lib/structr/repository
+      # config files
+      - ./structr/structr.conf:/var/lib/structr/structr.conf
+      - ./structr/license.key:/var/lib/structr/license.key
+      - ./structr/memory.config:/var/lib/structr/bin/memory.config
+
+volumes:
+  structr-files:
+  repository:
+  database:
+
+ # 3docker swarm init
+ # docker stack deploy --compose-file docker-compose.yml structr
+ # docker stack rm structr
