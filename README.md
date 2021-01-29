@@ -46,12 +46,14 @@
 
 ##### Inspecting the stack
 - Run `docker stack ps structr` to get a list of all tasks in the structr stack
-- RUN `docker stack services structr` to get a list of all services in the structr stack
+- Run `docker stack services structr` to get a list of all services in the structr stack
 
+----
 
 ### Customizing Ressources
 The CPU and RAM configuration of the containers can be changed in the docker-compose.yml file. If the config is changed here, then `./structr/memory.config` has to be adjusted as well to prevent Structr from using too much or too little ressources and triggering an OutOfMemory exception.
 
+----
 
 ### Deployment Roundtrip of an Structr application (order is crucial!!!):
 
