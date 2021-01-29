@@ -11,7 +11,7 @@
 - run `docker-compose build`
 
 ##### Starting the instances:
-- `docker-compose --compatibility up -d``
+- RUN `docker-compose --compatibility up -d` to start Neo4j and Structr
 - Open `http://127.0.0.1:8082/structr/` in your browser to access Structr
 
 ##### Stopping the instances:
@@ -30,7 +30,7 @@
 - run `docker swarm init`
 
 ##### Starting the instances:
-- `docker stack deploy --compose-file docker-compose.yml structr`
+- Run `docker stack deploy --compose-file docker-compose.yml structr` to start Neo4j and Structr
 - Open `http://127.0.0.1:8082/structr/` in your browser to access Structr
 
 ##### Stopping the instances:
@@ -42,8 +42,12 @@
 - `docker exec -it <Unique identifier for container> /bin/sh`
 
 ##### Inspecting the stack
-- `docker stack ps structr`
-- `docker stack services structr`
+- Run `docker stack ps structr` to get a list of all tasks in the structr stack
+- RUN `docker stack services structr` to get a list of all services in the structr stack
+
+
+### Customizing Ressources
+The CPU and RAM configuration of the containers can be changed in the docker-compose.yml file. 
 
 
 ### Deployment Roundtrip of an Structr application (order is crucial!!!):
