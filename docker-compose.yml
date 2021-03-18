@@ -9,7 +9,7 @@ services:
     #  - "7473:7473"
     #  - "7687:7687"
 
-    # for swarm mode deployment
+    # For swarm mode deployment only.
     deploy:
       resources:
         limits:
@@ -39,7 +39,9 @@ services:
     environment:
       - AGREE_TO_STRUCTR_PRIVACY_POLICY=yes
 
-    # for swarm mode deployment
+    # For swarm mode deployment only.
+    # If changes are made here, then it's also a good idea to make the adjustments to the 
+    # memory.conf file which contains the Java runtime configuration for Structr.
     deploy:
       resources:
         limits:
@@ -62,7 +64,7 @@ services:
       - ./structr/license.key:/var/lib/structr/license.key
       - ./structr/memory.config:/var/lib/structr/bin/memory.config
 
-      # Put service intp network so Structr and Neo4j can communicate
+      # Put service into network so Structr and Neo4j can communicate
     networks:
       database:
 
