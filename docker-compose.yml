@@ -2,11 +2,14 @@ version: '3.3'
 services:  
   neo4j:
     image: neo4j:3.5.25
-    #build: ./neo4j
-    ports:
-      - "7474:7474"
-      - "7473:7473"
-      - "7687:7687"
+
+    # Uncomment to give host access to the service container
+    # ports:
+    #  - "7474:7474"
+    #  - "7473:7473"
+    #  - "7687:7687"
+
+    # for swarm mode deployment
     deploy:
       resources:
         limits:
@@ -15,19 +18,28 @@ services:
         reservations:
           cpus: '1'
           memory: 1g
+
+    # Add volumes for data retention
     volumes:
-      - ./volumes/database:/data
+      # folders
+      - ./volumes/neo4j-database:/data
+      - ./volumes/neo4j-logs:/logs
+
+    # Put service networks so Structr and Neo4j can communicate
+    networks:
+      database:
+        aliases:
+          - neo4j
   structr:
     image: structr/structr:4.0-SNAPSHOT
-    build: ./structr
     depends_on:
-      - neo4j
-    links: 
       - neo4j
     ports:
      - "8082:8082"
     environment:
       - AGREE_TO_STRUCTR_PRIVACY_POLICY=yes
+
+    # for swarm mode deployment
     deploy:
       resources:
         limits:
@@ -36,16 +48,30 @@ services:
         reservations:
           cpus: '1'
           memory: 1g
+
+    # Add volumes for data retention
     volumes:
+      
       # folders
       - ./volumes/structr-files:/var/lib/structr/files
-      - ./volumes/repository:/var/lib/structr/repository
-      # config files
+      - ./volumes/structr-repository:/var/lib/structr/repository
+      - ./volumes/structr-logs:/var/lib/structr/logs
+
+      # config files for initial configuration of Structr
       - ./structr/structr.conf:/var/lib/structr/structr.conf
       - ./structr/license.key:/var/lib/structr/license.key
       - ./structr/memory.config:/var/lib/structr/bin/memory.config
 
+      # Put service intp network so Structr and Neo4j can communicate
+    networks:
+      database:
+
 volumes:
   structr-files:
-  repository:
+  structr-repository:
+  structr-logs:
+  neo4j-database:
+  neo4j-logs:
+
+networks:
   database:
