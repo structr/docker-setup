@@ -1,13 +1,13 @@
 version: '3.3'
 services:  
   neo4j:
-    image: neo4j:3.5.25
+    image: neo4j:latest
 
     # Structr versions < 4.0 can't change the initial neo4j password, so it has to be
     # set in the environment of the docker container. The password here has to be the
-    # same as in the structr.conf file (default-migrated.database.connection.password).
-    # environment:
-    #  - NEO4J_AUTH=neo4j/structr
+    # same as in the structr.conf file (local-neo4j.database.connection.password).
+    environment:
+      - NEO4J_AUTH=neo4j/structr
 
     # Uncomment to give host access to the service container
     # ports:
@@ -28,12 +28,12 @@ services:
     # Add volumes for data retention
     volumes:
       # folders
-      - ./volumes/neo4j-database:/data
+      - ./volumes/neo4j-data:/data
       - ./volumes/neo4j-logs:/logs
 
     # Put service networks so Structr and Neo4j can communicate
     networks:
-      database:
+      structr-net:
         aliases:
           - neo4j
   structr:
@@ -72,7 +72,7 @@ services:
 
       # Put service into network so Structr and Neo4j can communicate
     networks:
-      database:
+      structr-net:
 
 volumes:
   structr-files:
@@ -82,4 +82,4 @@ volumes:
   neo4j-logs:
 
 networks:
-  database:
+  structr-net:
