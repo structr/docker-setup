@@ -73,6 +73,20 @@ services:
       # Put service into network so Structr and Neo4j can communicate
     networks:
       structr-net:
+        aliases:
+          - structr
+
+  structr-autodeploy:
+    build: ./structr-autodeploy
+    depends_on:
+      - structr
+    environment:
+      - HOST=http://structr:8082/structr/health/ready
+      - APP_ZIP_URL=http://YOUR_REPOSITOR_URL:PORT/webapp.zip
+      - DATA_ZIP_URL=http://YOUR_REPOSITOR_URL:PORT/data.zip
+      - STRUCTR_SUPERADMIN_PASSWORD=structrSuperuser
+    networks:
+      structr-net:
 
 volumes:
   structr-files:

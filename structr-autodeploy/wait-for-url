@@ -5,11 +5,12 @@ declare HOST=$1
 declare STATUS=$2
 declare TIMEOUT=$3
 
-HOST=$HOST STATUS=$STATUS timeout --foreground -s TERM $TIMEOUT bash -c \
+HOST=$HOST STATUS=$STATUS timeout -s TERM $TIMEOUT /bin/bash -c \
     'while [[ ${STATUS_RECEIVED} != ${STATUS} ]];\
         do STATUS_RECEIVED=$(curl -s -o /dev/null -L -w ''%{http_code}'' ${HOST}) && \
-        echo "Polling [$HOST].. Received status code: $STATUS_RECEIVED" && \
+        echo "Polling [$HOST].. Received status code: $STATUS_RECEIVED", Expecing status code: $STATUS && \
         sleep 1;\
     done;
     echo Success with status: $STATUS_RECEIVED'
 
+echo "wait-for script finished!"
