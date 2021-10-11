@@ -3,35 +3,9 @@ services:
   neo4j:
     image: neo4j:latest
 
-    # Structr versions < 4.0 can't change the initial neo4j password, so it has to be
-    # set in the environment of the docker container. The password here has to be the
-    # same as in the structr.conf file (local-neo4j.database.connection.password).
     environment:
       - NEO4J_AUTH=neo4j/structr
 
-    # Uncomment to give host access to the service container
-    # ports:
-    #  - "7474:7474"
-    #  - "7473:7473"
-    #  - "7687:7687"
-
-    # For swarm mode deployment only.
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 4g
-        reservations:
-          cpus: '1'
-          memory: 1g
-
-    # Add volumes for data retention
-    volumes:
-      # folders
-      - ./volumes/neo4j-data:/data
-      - ./volumes/neo4j-logs:/logs
-
-    # Put service networks so Structr and Neo4j can communicate
     networks:
       structr-net:
         aliases:
@@ -45,32 +19,11 @@ services:
     environment:
       - AGREE_TO_STRUCTR_PRIVACY_POLICY=yes
 
-    # For swarm mode deployment only.
-    # If changes are made here, then it's also a good idea to make the adjustments to the 
-    # memory.conf file which contains the Java runtime configuration for Structr.
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 4g
-        reservations:
-          cpus: '1'
-          memory: 1g
-
-    # Add volumes for data retention
     volumes:
-
-      # folders
-      - ./volumes/structr-files:/var/lib/structr/files
-      - ./volumes/structr-repository:/var/lib/structr/repository
-      - ./volumes/structr-logs:/var/lib/structr/logs
-
-      # config files for initial configuration of Structr
       - ./structr/structr.conf:/var/lib/structr/structr.conf
       - ./structr/license.key:/var/lib/structr/license.key
       - ./structr/memory.config:/var/lib/structr/bin/memory.config
 
-      # Put service into network so Structr and Neo4j can communicate
     networks:
       structr-net:
         aliases:
@@ -81,19 +34,12 @@ services:
     depends_on:
       - structr
     environment:
-      - HOST=http://structr:8082/structr/health/ready
-      - APP_ZIP_URL=http://YOUR_REPOSITOR_URL:PORT/webapp.zip
-      - DATA_ZIP_URL=http://YOUR_REPOSITOR_URL:PORT/data.zip
+      - HOST=structr:8082
+      - APP_ZIP_URL=https://shiggy.de/home/194575b51e8b452c9539322f69f90f39/webapp_20211007_130140.zip
+      - DATA_ZIP_URL=https://shiggy.de/home/194575b51e8b452c9539322f69f90f39/data_20211007_130144.zip
       - STRUCTR_SUPERADMIN_PASSWORD=structrSuperuser
     networks:
       structr-net:
-
-volumes:
-  structr-files:
-  structr-repository:
-  structr-logs:
-  neo4j-database:
-  neo4j-logs:
 
 networks:
   structr-net:

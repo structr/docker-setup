@@ -1,14 +1,14 @@
 #!/bin/bash
 set -eu
 
-declare HOST=$1
+declare URL=$1
 declare STATUS=$2
 declare TIMEOUT=$3
 
-HOST=$HOST STATUS=$STATUS timeout -s TERM $TIMEOUT /bin/bash -c \
+URL=$URL STATUS=$STATUS timeout -s TERM $TIMEOUT /bin/bash -c \
     'while [[ ${STATUS_RECEIVED} != ${STATUS} ]];\
-        do STATUS_RECEIVED=$(curl -s -o /dev/null -L -w ''%{http_code}'' ${HOST}) && \
-        echo "Polling [$HOST].. Received status code: $STATUS_RECEIVED", Expecting status code: $STATUS && \
+        do STATUS_RECEIVED=$(curl -s -o /dev/null -L -w ''%{http_code}'' ${URL}) && \
+        echo "Polling [$URL].. Received status code: $STATUS_RECEIVED", Expecting status code: $STATUS && \
         sleep 1;\
     done;
     echo Success with status: $STATUS_RECEIVED'
