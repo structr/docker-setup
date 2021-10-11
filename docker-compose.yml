@@ -35,8 +35,8 @@ services:
       - structr
     environment:
       - HOST=structr:8082
-      - APP_ZIP_URL=https://shiggy.de/home/194575b51e8b452c9539322f69f90f39/webapp_20211007_130140.zip
-      - DATA_ZIP_URL=https://shiggy.de/home/194575b51e8b452c9539322f69f90f39/data_20211007_130144.zip
+      - APP_ZIP_URL=
+      - DATA_ZIP_URL=
       - STRUCTR_SUPERADMIN_PASSWORD=structrSuperuser
     networks:
       structr-net:
