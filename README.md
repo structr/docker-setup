@@ -59,8 +59,8 @@ The CPU and RAM configuration of the containers can be changed in the docker-com
 
 1. clone repository to ./volumes/repository
 2. goto `http://localhost:8082/structr/#dashboard` -> Deployment
-3. copy `/var/lib/structr/repository/webapp` into the 'Import application from local directory' input field and click on the import button
-4. when changes have been made copy the same path into the 'Export application to local directory' input field and click the button
+3. copy `/var/lib/structr/repository/webapp` into the 'Application import from server directory' input field and click on the import button
+4. when changes have been made copy the same path into the 'Application export to server directory' input field and click the button
 5. commit your changes on the host system to github
 6. pull the new repository version
 7. push your changes
