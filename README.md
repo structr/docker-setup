@@ -2,7 +2,7 @@
 
 ### Requirements:
 - docker
-- docker-compose
+- (docker-compose)
 
 ----
 
