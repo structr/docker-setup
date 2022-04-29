@@ -34,6 +34,7 @@ mkdir -p ./volumes/neo4j-database
 echo "Creating neo4j logs volume mount"
 mkdir -p ./volumes/neo4j-logs
 
+mkdir -p ./structr
 touch ./structr/license.key
 
 echo "\n${GREEN}Setup complete"
