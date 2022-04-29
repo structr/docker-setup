@@ -47,7 +47,7 @@ services:
       - STRUCTR_MAX_HEAP=4g
       - AGREE_TO_STRUCTR_PRIVACY_POLICY=yes
       - STRUCTR_superuser_password=superuser
-      - STRUCTR_database_available_connections=neo4j-default
+      - STRUCTR_database_available_connections=neo4j_default
       - STRUCTR_neo4j__default_database_driver=org.structr.bolt.BoltDatabaseService
       - STRUCTR_neo4j__default_database_connection_name=neo4j_default
       - STRUCTR_neo4j__default_database_connection_url=bolt://neo4j:7687
