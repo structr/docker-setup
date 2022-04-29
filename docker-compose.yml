@@ -6,8 +6,8 @@ services:
     # Structr versions < 4.0 can't change the initial neo4j password, so it has to be
     # set in the environment of the docker container. The password here has to be the
     # same as in the structr.conf file (default-migrated.database.connection.password).
-    # environment:
-    #  - NEO4J_AUTH=neo4j/structr
+    environment:
+      - NEO4J_AUTH=neo4j/structr
 
     # Uncomment to give host access to the service container
     # ports:
@@ -43,11 +43,19 @@ services:
     ports:
      - "8082:8082"
     environment:
+      - STRUCTR_MIN_HEAP=1g
+      - STRUCTR_MAX_HEAP=4g
       - AGREE_TO_STRUCTR_PRIVACY_POLICY=yes
+      - STRUCTR_superuser_password=superuser
+      - STRUCTR_database_available_connections=neo4j-default
+      - STRUCTR_neo4j__default_database_driver=org.structr.bolt.BoltDatabaseService
+      - STRUCTR_neo4j__default_database_connection_name=neo4j_default
+      - STRUCTR_neo4j__default_database_connection_url=bolt://neo4j:7687
+      - STRUCTR_neo4j__default_database_connection_username=neo4j
+      - STRUCTR_neo4j__default_database_connection_password=structr
+      - STRUCTR_nodeservice_active=neo4j_default
 
     # For swarm mode deployment only.
-    # If changes are made here, then it's also a good idea to make the adjustments to the 
-    # memory.conf file which contains the Java runtime configuration for Structr.
     deploy:
       resources:
         limits:
@@ -66,9 +74,9 @@ services:
       - ./volumes/structr-logs:/var/lib/structr/logs
 
       # config files for initial configuration of Structr
-      - ./structr/structr.conf:/var/lib/structr/structr.conf
-      - ./structr/license.key:/var/lib/structr/license.key
-      - ./structr/memory.config:/var/lib/structr/bin/memory.config
+      # - ./structr/structr.conf:/var/lib/structr/structr.conf
+      # - ./structr/license.key:/var/lib/structr/license.key
+      # - ./structr/memory.config:/var/lib/structr/bin/memory.config
 
       # Put service into network so Structr and Neo4j can communicate
     networks:
