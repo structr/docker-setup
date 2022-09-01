@@ -3,12 +3,11 @@ on:
   push
 
 jobs:
-  run-tests:
-    runs-on: self-hosted    
-    environment: build-and-test
+  test-start:
     strategy:
-      matrix: 
-        os: [ubuntu-latest, macos-latest]
+        matrix: 
+          os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}   
 
     steps:
       - uses: actions/checkout@v3
