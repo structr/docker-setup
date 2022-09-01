@@ -37,7 +37,7 @@ services:
         aliases:
           - neo4j
   structr:
-    image: structr/structr:4.2-SNAPSHOT
+    image: structr:4.3-SNAPSHOT
     depends_on:
       - neo4j
     ports:
@@ -54,6 +54,11 @@ services:
       - STRUCTR_neo4j__default_database_connection_username=neo4j
       - STRUCTR_neo4j__default_database_connection_password=structr
       - STRUCTR_nodeservice_active=neo4j_default
+      - STRUCTR_application_schema_automigration=true
+
+      # Add file system group for repository directory mount
+      - STRUCTR_deploymentservlet_filegroup_name=structr
+      - STRUCTR_deploymentservlet_filegroup_id=8082
 
     # For swarm mode deployment only.
     deploy:
@@ -72,11 +77,7 @@ services:
       - ./volumes/structr-files:/var/lib/structr/files
       - ./volumes/structr-repository:/var/lib/structr/repository
       - ./volumes/structr-logs:/var/lib/structr/logs
-
-      # config files for initial configuration of Structr
-      # - ./structr/structr.conf:/var/lib/structr/structr.conf
-      # - ./structr/license.key:/var/lib/structr/license.key
-      # - ./structr/memory.config:/var/lib/structr/bin/memory.config
+      - ./structr/license.key:/var/lib/structr/license.key
 
       # Put service into network so Structr and Neo4j can communicate
     networks:
