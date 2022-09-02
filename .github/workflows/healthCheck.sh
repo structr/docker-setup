@@ -2,7 +2,7 @@
 
 function healthCheck() {
     echo "Waiting for Structr to be ready for deployment"
-    for i in $(seq 1 50)
+    for i in $(seq 1 100)
     do
       STATUS_CODE=$(curl --write-out %{http_code} --silent localhost:8082/structr/health/ready)
       
