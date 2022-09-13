@@ -1,3 +1,5 @@
+[![Tests](https://github.com/structr/docker-setup/actions/workflows/main.yml/badge.svg)](https://github.com/structr/docker-setup/actions/workflows/main.yml)
+
 # Structr Docker Setup
 
 ### Requirements:
@@ -57,7 +59,7 @@ The CPU and RAM configuration of the containers can be changed in the docker-com
 
 ### Deployment Roundtrip of an Structr application (order is crucial!!!):
 
-1. clone repository to ./volumes/repository
+1. clone repository to ./volumes/structr-repository
 2. goto `http://localhost:8082/structr/#dashboard` -> Deployment
 3. copy `/var/lib/structr/repository/webapp` into the 'Application import from server directory' input field and click on the import button
 4. when changes have been made copy the same path into the 'Application export to server directory' input field and click the button
