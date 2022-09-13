@@ -1,3 +1,5 @@
+[![Tests](https://github.com/structr/docker-setup/actions/workflows/main.yml/badge.svg)](https://github.com/structr/docker-setup/actions/workflows/main.yml)
+
 # Structr Docker Setup
 
 ### Requirements:
