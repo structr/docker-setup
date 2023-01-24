@@ -8,9 +8,15 @@
 
 ----
 
+### First steps:
+
+
+- Make sure, you have a valid Structr license.key file and copy it to ./structr/license.key. If you want to run the community edition of Structr, you can create an empty file and move it also to ./structr/license.key.
+
 ### Usage with docker-compose:
 ##### Initial setup:
 
+- Run the setup.sh script before starting the stack, so all necessary volume folders for mounting to the containers are created. (Only for Unix and macOS users)
 - Copy your license.key file to ./structr/license.key
 - Run `docker-compose build`
 
@@ -26,11 +32,16 @@
 - `note the container id`
 - `docker exec -it <Unique identifier for container> /bin/sh`
 
+##### Inpecting the service log files
+- `docker-compose logs` will print out the server.log of structr and the neo4j.log of Neo4j
+- The Structr container server.log will also be written to ./volumes/structr-logs/server.log, the Neo4j debug.log and neo4j.log will be written to ./volumes/neo4j-logs/*.log
+
 ----
 
 ### Usage with docker swarm:
 ##### Initial setup:
 
+- Run the setup.sh script before starting the stack, so all necessary volume folders for mounting to the containers are created. (Only for Unix and macOS users)
 - copy your license.key file to ./structr/license.key
 - run `docker swarm init`
 
@@ -49,6 +60,9 @@
 ##### Inspecting the stack
 - Run `docker stack ps structr` to get a list of all tasks in the structr stack
 - Run `docker stack services structr` to get a list of all services in the structr stack
+
+##### Inpecting the service log files
+- The Structr container server.log will be written to ./volumes/structr-logs/server.log, the Neo4j debug.log and neo4j.log will be written to ./volumes/neo4j-logs/*.log
 
 ----
 
