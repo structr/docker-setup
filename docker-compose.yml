@@ -1,13 +1,13 @@
 version: '3.3'
 services:  
   neo4j:
-    image: neo4j:4.4
+    image: neo4j:latest
 
     # Structr versions < 4.0 can't change the initial neo4j password, so it has to be
     # set in the environment of the docker container. The password here has to be the
     # same as in the structr.conf file (default-migrated.database.connection.password).
     environment:
-      - NEO4J_AUTH=neo4j/structr
+      - NEO4J_AUTH=neo4j/structrDockerSetup
 
     # Uncomment to give host access to the service container
     # ports:
@@ -28,8 +28,8 @@ services:
     # Add volumes for data retention
     volumes:
       # folders
-      - ./volumes/neo4j-database:/data
-      - ./volumes/neo4j-logs:/logs
+      - neo4j-database:/data
+      - neo4j-logs:/logs
 
     # Put service networks so Structr and Neo4j can communicate
     networks:
@@ -37,7 +37,7 @@ services:
         aliases:
           - neo4j
   structr:
-    image: structr/structr:latest
+    image: structr/structr:5.0-rc1
     depends_on:
       - neo4j
     ports:
@@ -52,7 +52,7 @@ services:
       - STRUCTR_neo4j__default_database_connection_name=neo4j_default
       - STRUCTR_neo4j__default_database_connection_url=bolt://neo4j:7687
       - STRUCTR_neo4j__default_database_connection_username=neo4j
-      - STRUCTR_neo4j__default_database_connection_password=structr
+      - STRUCTR_neo4j__default_database_connection_password=structrDockerSetup
       - STRUCTR_nodeservice_active=neo4j_default
       - STRUCTR_application_schema_automigration=true
 
@@ -74,9 +74,9 @@ services:
     volumes:
 
       # folders
-      - ./volumes/structr-files:/var/lib/structr/files
-      - ./volumes/structr-repository:/var/lib/structr/repository
-      - ./volumes/structr-logs:/var/lib/structr/logs
+      - structr-files:/var/lib/structr/files
+      - structr-repository:/var/lib/structr/repository
+      - structr-logs:/var/lib/structr/logs
       - ./structr/license.key:/var/lib/structr/license.key
 
       # Put service into network so Structr and Neo4j can communicate
