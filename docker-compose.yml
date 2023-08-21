@@ -37,7 +37,7 @@ services:
         aliases:
           - neo4j
   structr:
-    image: structr/structr:5.0
+    image: structr/structr:5.0.0
     depends_on:
       - neo4j
     ports:
