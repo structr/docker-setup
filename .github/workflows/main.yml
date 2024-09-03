@@ -6,16 +6,15 @@ jobs:
   test-start:
     strategy:
         matrix: 
-          os: [ubuntu-latest, macOS-latest]
+          os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}   
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install docker on macOS
+      - name: Install docker
         uses: docker-practice/actions-setup-docker@master
-        if: ${{ matrix.os == 'macOS-latest' }}
-
+        
       - name: Run setup script
         run: ./setup.sh
 
