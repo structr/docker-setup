@@ -1,83 +1,170 @@
-[![Tests](https://github.com/structr/docker-setup/actions/workflows/main.yml/badge.svg)](https://github.com/structr/docker-setup/actions/workflows/main.yml)
-
 # Structr Docker Setup
 
-### Requirements:
-- docker
-- (docker-compose)
+[![Tests](https://github.com/structr/docker-setup/actions/workflows/main.yml/badge.svg)](https://github.com/structr/docker-setup/actions/workflows/main.yml)
 
-----
+A Docker Compose setup for running Structr with a pre-configured Neo4j database.
 
-### First steps:
+---
 
+## Requirements
 
-- Make sure, you have a valid Structr license.key file and copy it to ./structr/license.key. If you want to run the community edition of Structr, you can create an empty file and move it also to ./structr/license.key.
+- Docker
+- Docker Compose
 
-### Usage with docker-compose:
-##### Initial setup:
+---
 
-- Run the setup.sh script before starting the stack, so all necessary volume folders for mounting to the containers are created. (Only for Unix and macOS users)
-- Copy your license.key file to ./structr/license.key
-- Run `docker-compose build`
+## Quick Start (Easiest Method)
 
-##### Starting the instances:
-- Run `docker-compose --compatibility up -d` to start Neo4j and Structr
-- Open `http://127.0.0.1:8082/structr/` in your browser to access Structr
+This is the simplest way to get started. No configuration needed.
 
-##### Stopping the instances:
-- `docker-compose down`
+1. **Start the containers:**
+   ```bash
+   docker compose up -d
+   ```
 
-##### Inspecting the containers
-- `docker ps`
-- `note the container id`
-- `docker exec -it <Unique identifier for container> /bin/sh`
+2. **Access Structr:**
+   Open http://127.0.0.1:8082/structr/ in your browser
 
-##### Inpecting the service log files
-- `docker-compose logs` will print out the server.log of structr and the neo4j.log of Neo4j
-- The Structr container server.log will also be written to ./volumes/structr-logs/server.log, the Neo4j debug.log and neo4j.log will be written to ./volumes/neo4j-logs/*.log
+3. **Stop the containers:**
+   ```bash
+   docker compose down
+   ```
 
-----
+**Note:** This uses Docker-managed volumes. Your data persists between restarts but is managed internally by Docker.
 
-### Usage with docker swarm:
-##### Initial setup:
+---
 
-- Run the setup.sh script before starting the stack, so all necessary volume folders for mounting to the containers are created. (Only for Unix and macOS users)
-- copy your license.key file to ./structr/license.key
-- run `docker swarm init`
+## Advanced Setup (Custom Volume Directories)
 
-##### Starting the instances:
-- Run `docker stack deploy --compose-file docker-compose.yml structr` to start Neo4j and Structr
-- Open `http://127.0.0.1:8082/structr/` in your browser to access Structr
+If you want to access Structr data directly on your host filesystem (useful for deployments and backups), you can use custom volume mounts.
 
-##### Stopping the instances:
-- `docker stack rm structr`
+### Initial Setup
 
-##### Inspecting the containers
-- `docker ps`
-- `note the container id`
-- `docker exec -it <Unique identifier for container> /bin/sh`
+1. **Run the setup script:**
+   ```bash
+   ./setup.sh
+   ```
+   This creates local directories and sets proper permissions.
 
-##### Inspecting the stack
-- Run `docker stack ps structr` to get a list of all tasks in the structr stack
-- Run `docker stack services structr` to get a list of all services in the structr stack
+2. **Add your license file:**
+   - If you have a Structr license, copy it to `./structr/license.key`
+   - For community edition, the setup script creates an empty file for you
 
-##### Inpecting the service log files
-- The Structr container server.log will be written to ./volumes/structr-logs/server.log, the Neo4j debug.log and neo4j.log will be written to ./volumes/neo4j-logs/*.log
+3. **Modify docker-compose.yml:**
+   
+   Replace the named volumes with bind mounts. Change the `volumes` section for each service:
 
-----
+   **For Neo4j:**
+   ```yaml
+   volumes:
+     - ./volumes/neo4j-database:/data
+     - ./volumes/neo4j-logs:/logs
+   ```
 
-### Customizing Ressources
-The CPU and RAM configuration of the containers can be changed in the docker-compose.yml file.
+   **For Structr:**
+   ```yaml
+   volumes:
+     - ./volumes/structr-files:/var/lib/structr/files
+     - ./volumes/structr-repository:/var/lib/structr/repository
+     - ./volumes/structr-logs:/var/lib/structr/logs
+     - ./structr/license.key:/var/lib/structr/license.key
+   ```
 
-----
+4. **Start the containers:**
+   ```bash
+   docker compose up -d
+   ```
 
-### Deployment Roundtrip of an Structr application (order is crucial!!!):
+### Benefits of Custom Volume Directories
 
-1. clone repository to ./volumes/structr-repository
-2. goto `http://localhost:8082/structr/#dashboard` -> Deployment
-3. copy `/var/lib/structr/repository/webapp` into the 'Application import from server directory' input field and click on the import button
-4. when changes have been made copy the same path into the 'Application export to server directory' input field and click the button
-5. commit your changes on the host system to github
-6. pull the new repository version
-7. push your changes
-8. repeat from 3.
+- Direct access to logs in `./volumes/structr-logs/` and `./volumes/neo4j-logs/`
+- Easy backup and restore of data
+- Simplified deployment workflows (see below)
+
+---
+
+## Working with Containers
+
+### View running containers
+```bash
+docker ps
+```
+
+### Access container shell
+```bash
+docker exec -it <container_id> /bin/sh
+```
+
+### View logs
+```bash
+docker compose logs          # All logs
+docker compose logs structr  # Structr logs only
+docker compose logs neo4j    # Neo4j logs only
+```
+
+---
+
+## Deployment Workflow
+
+When using custom volume directories, you can deploy Structr applications through the repository directory.
+
+**Important: Follow this order:**
+
+1. Clone your application repository to `./volumes/structr-repository`
+
+2. Navigate to Structr's dashboard at http://localhost:8082/structr/#dashboard → Deployment
+
+3. **Import application:**
+   - Enter `/var/lib/structr/repository/webapp` in the "Application import from server directory" field
+   - Click import
+
+4. **Export changes:**
+   - After making changes in Structr
+   - Enter `/var/lib/structr/repository/webapp` in the "Application export to server directory" field
+   - Click export
+
+5. **Commit and push:**
+   - From the host system, commit your changes in `./volumes/structr-repository`
+   - Push to your repository
+
+6. **Deploy updates:**
+   - Pull the latest changes
+   - Repeat from step 3
+
+---
+
+## Configuration
+
+### Default Credentials
+
+- **Structr:**
+  - Username: `admin`
+  - Password: `admin`
+
+- **Neo4j:**
+  - Username: `neo4j`
+  - Password: `structrDockerSetup`
+
+### Resource Limits
+
+You can adjust CPU and memory limits in `docker-compose.yml` under the `deploy.resources` section for each service.
+
+Default limits:
+- **CPU:** 2 cores limit, 1 core reserved
+- **Memory:** 4GB limit, 1GB reserved
+
+---
+
+## Troubleshooting
+
+### Containers won't start
+- Check if ports 8082, 7474, 7473, or 7687 are already in use
+- View logs with `docker compose logs`
+
+### Permission issues with custom volumes
+- Run the setup script again: `./setup.sh`
+- Ensure your user is in the `structr` group (may require logout/login)
+
+### Data persistence
+- **Quick Start method:** Data stored in Docker volumes, persists until you run `docker compose down -v`
+- **Advanced method:** Data stored in `./volumes/` directory on your host

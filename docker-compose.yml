@@ -2,20 +2,21 @@ version: '3.3'
 services:  
   neo4j:
     image: neo4j:latest
+    container_name: structr-neo4j
+    restart: unless-stopped
 
-    # Structr versions < 4.0 can't change the initial neo4j password, so it has to be
-    # set in the environment of the docker container. The password here has to be the
-    # same as in the structr.conf file (default-migrated.database.connection.password).
     environment:
       - NEO4J_AUTH=neo4j/structrDockerSetup
+      - NEO4J_server_memory_heap_initial__size=1G
+      - NEO4J_server_memory_heap_max__size=2G
+      - NEO4J_server_memory_pagecache_size=1G
 
-    # Uncomment to give host access to the service container
+    # Uncomment to access Neo4j browser and Bolt from host
     # ports:
-    #  - "7474:7474"
-    #  - "7473:7473"
-    #  - "7687:7687"
+    #   - "7474:7474"  # HTTP
+    #   - "7473:7473"  # HTTPS
+    #   - "7687:7687"  # Bolt
 
-    # For swarm mode deployment only.
     deploy:
       resources:
         limits:
@@ -33,20 +34,29 @@ services:
 
     # Put service networks so Structr and Neo4j can communicate
     networks:
-      database:
+      structr-network:
         aliases:
           - neo4j
   structr:
     image: structr/structr:5.2.1
+    container_name: structr-app
+    restart: unless-stopped
     depends_on:
       - neo4j
     ports:
      - "8082:8082"
     environment:
+      # JVM Memory Settings
       - STRUCTR_MIN_HEAP=1g
       - STRUCTR_MAX_HEAP=4g
+      
+      # Privacy Policy Agreement
       - AGREE_TO_STRUCTR_PRIVACY_POLICY=yes
+      
+      # Superuser Configuration
       - STRUCTR_superuser_password=superuser
+      
+      # Neo4j Connection Configuration
       - STRUCTR_database_available_connections=neo4j_default
       - STRUCTR_neo4j__default_database_driver=org.structr.bolt.BoltDatabaseService
       - STRUCTR_neo4j__default_database_connection_name=neo4j_default
@@ -54,13 +64,14 @@ services:
       - STRUCTR_neo4j__default_database_connection_username=neo4j
       - STRUCTR_neo4j__default_database_connection_password=structrDockerSetup
       - STRUCTR_nodeservice_active=neo4j_default
+      
+      # Schema Configuration
       - STRUCTR_application_schema_automigration=true
-
-      # Add file system group for repository directory mount
+      
+      # Deployment Configuration (for repository directory mount)
       - STRUCTR_deploymentservlet_filegroup_name=structr
       - STRUCTR_deploymentservlet_filegroup_id=8082
 
-    # For swarm mode deployment only.
     deploy:
       resources:
         limits:
@@ -70,10 +81,7 @@ services:
           cpus: '1'
           memory: 1g
 
-    # Add volumes for data retention
     volumes:
-
-      # folders
       - structr-files:/var/lib/structr/files
       - structr-repository:/var/lib/structr/repository
       - structr-logs:/var/lib/structr/logs
@@ -81,14 +89,19 @@ services:
 
       # Put service into network so Structr and Neo4j can communicate
     networks:
-      database:
+      structr-network:
 
 volumes:
-  structr-files:
-  structr-repository:
-  structr-logs:
   neo4j-database:
+    name: structr-neo4j-database
   neo4j-logs:
+    name: structr-neo4j-logs
+  structr-files:
+    name: structr-files
+  structr-repository:
+    name: structr-repository
+  structr-logs:
+    name: structr-logs
 
 networks:
-  database:
+  structr-network:
