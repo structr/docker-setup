@@ -6,7 +6,7 @@ jobs:
   test-startup:
     strategy:
         matrix: 
-          os: [ubuntu-latest]
+          os: [ubuntu-latest, macOS-latest]
 
     runs-on: ${{ matrix.os }}   
     steps:
