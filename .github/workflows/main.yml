@@ -3,7 +3,7 @@ on:
   push
 
 jobs:
-  test-start:
+  test-startup:
     strategy:
         matrix: 
           os: [ubuntu-latest, macOS-latest]
@@ -12,15 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install docker on macOS
-        uses: docker-practice/actions-setup-docker@master
+      - name: Setup Docker on macOS
+        id: setup-docker
+        uses: douglascamata/setup-docker-macos-action@v1.0.1
         if: ${{ matrix.os == 'macOS-latest' }}
 
-      - name: Run setup script
-        run: ./setup.sh
-
       - name: Start the stack
-        run:  docker-compose up -d
+        run:  docker compose up -d
       
       - name: Check if system comes up
         run: ./.github/workflows/healthCheck.sh
