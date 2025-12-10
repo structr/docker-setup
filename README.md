@@ -4,6 +4,10 @@
 
 A Docker Compose setup for running Structr with a pre-configured Neo4j database.
 
+## Note: Privacy Policy Agreement
+
+The environment variable `AGREE_TO_STRUCTR_PRIVACY_POLICY` (https://structr.com/privacy) needs to be set to `yes` in the `docker-compose.yml` file before Structr can be started.
+
 ---
 
 ## Requirements

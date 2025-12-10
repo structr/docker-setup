@@ -38,7 +38,7 @@ services:
         aliases:
           - neo4j
   structr:
-    image: structr/structr:5.2.1
+    image: structr/structr:6.0.0
     container_name: structr-app
     restart: unless-stopped
     depends_on:
@@ -46,12 +46,13 @@ services:
     ports:
      - "8082:8082"
     environment:
-      # JVM Memory Settings
-      - STRUCTR_MIN_HEAP=1g
-      - STRUCTR_MAX_HEAP=4g
+      # JVM Memory Settings and timezone
+      - STRUCTR_application_memory_min__heap=1g
+      - STRUCTR_application_memory_max__heap=4g
+      - STRUCTR_application_timezone=UTC
       
       # Privacy Policy Agreement
-      - AGREE_TO_STRUCTR_PRIVACY_POLICY=yes
+      - AGREE_TO_STRUCTR_PRIVACY_POLICY=no
       
       # Superuser Configuration
       - STRUCTR_superuser_password=superuser
