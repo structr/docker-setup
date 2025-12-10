@@ -17,6 +17,9 @@ jobs:
         uses: douglascamata/setup-docker-macos-action@v1.0.1
         if: ${{ matrix.os == 'macOS-latest' }}
 
+      - Agree to Structr policy
+        run: sed -i 's/AGREE_TO_STRUCTR_PRIVACY_POLICY=no/AGREE_TO_STRUCTR_PRIVACY_POLICY=yes/' docker-compose.yml
+
       - name: Start the stack
         run:  docker compose up -d
       
